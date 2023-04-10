@@ -101,64 +101,64 @@ For more information about the match query syntax and additional parameters that
 
 ### Example
 ```javascript
-	var Manticoresearch = require('manticoresearch');
-	var client = new Manticoresearch.ApiClient();
-	client.basePath="http://localhost:9308";
+var Manticoresearch = require('manticoresearch');
+var client = new Manticoresearch.ApiClient();
+client.basePath="http://localhost:9308";
 ```
 
 ### SearchRequest
 ```javascript
-	var searchApi = new Manticoresearch.SearchApi(client);
+var searchApi = new Manticoresearch.SearchApi(client);
 	
-	var searchRequest = new Manticoresearch.SearchRequest();
-	searchRequest.index = "movies";
-	searchRequest.query = {"match_all": {}};
+var searchRequest = new Manticoresearch.SearchRequest();
+searchRequest.index = "movies";
+searchRequest.query = {"match_all": {}};
 	
-	searchRequest.limit = 10;
-	searchRequest.track_scores = true;
-	searchRequest.options = {'cutoff': 5};
-	searchRequest.options['ranker'] = 'bm25';
-	searchRequest.source = 'title';
-	
-	async function(){
-    	var res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}
+searchRequest.limit = 10;
+searchRequest.track_scores = true;
+searchRequest.options = {'cutoff': 5};
+searchRequest.options['ranker'] = 'bm25';
+searchRequest.source = 'title';
+
+async function(){
+	var res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}
 ```
 
 ### SourceByRules
 
 [[SourceByRules]](SourceByRules.md)
 ```javascript
-    var searchRequest = new Manticoresearch.SearchRequest();
-    searchRequest.index = "movies";
-	searchRequest.query = {"match_all": {}};
-    
-	searchRequest.source = new Manticoresearch.SourceByRules();
-	searchRequest.source.includes = ['title', 'year'];
-	searchRequest.source.excludes = ['code'];
+var searchRequest = new Manticoresearch.SearchRequest();
+searchRequest.index = "movies";
+searchRequest.query = {"match_all": {}};
 
-	async function(){
-    	var res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}
+searchRequest.source = new Manticoresearch.SourceByRules();
+searchRequest.source.includes = ['title', 'year'];
+searchRequest.source.excludes = ['code'];
 
-	For detailed information on the `source` property see https://manual.manticoresearch.com/Searching/Search_results#Source-selection
+async function(){
+	var res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}
+
+For detailed information on the `source` property see https://manual.manticoresearch.com/Searching/Search_results#Source-selection
 ```
 
 ### Sort
 ```javascript
-	//Setting the `sort` property:
-    var searchRequest = new Manticoresearch.SearchRequest();
-    searchRequest.index = "movies";
-	searchRequest.query = {"match_all": {}};
-    
-	searchRequest.sort = ['year']
-	
-	async function(){
-		var res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}
+//Setting the `sort` property:
+var searchRequest = new Manticoresearch.SearchRequest();
+searchRequest.index = "movies";
+searchRequest.query = {"match_all": {}};
+
+searchRequest.sort = ['year']
+
+async function(){
+	var res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}
 ```
 
 ### SortOrder
@@ -167,106 +167,106 @@ For more information about the match query syntax and additional parameters that
 [[SortOrder]](SortOrder.md)
 [[SortMVA]](SortMVA.md)
 ```javascript
-	var searchRequest = new Manticoresearch.SearchRequest();
-	searchRequest.index = "movies";
-	searchRequest.query = {"match_all": {}};
-	
-	var sort2 = new Manticoresearch.SortOrder('rating', 'asc');
-	var sort3 = new Manticoresearch.SortMVA('code', 'desc', 'max');
-	searchRequest.sort.push(...[sort2,sort3]);
+var searchRequest = new Manticoresearch.SearchRequest();
+searchRequest.index = "movies";
+searchRequest.query = {"match_all": {}};
 
-	async function(){
-		var res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}
-	//For detailed information on sorting see https://manual.manticoresearch.com/Searching/Sorting_and_ranking#HTTP
+var sort2 = new Manticoresearch.SortOrder('rating', 'asc');
+var sort3 = new Manticoresearch.SortMVA('code', 'desc', 'max');
+searchRequest.sort.push(...[sort2,sort3]);
+
+async function(){
+	var res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}
+//For detailed information on sorting see https://manual.manticoresearch.com/Searching/Sorting_and_ranking#HTTP
 ```
 
 ### Expressions
 ```javascript    
-    //Setting the `expressions` property:
-    var searchRequest = new Manticoresearch.SearchRequest();
-    searchRequest.index = "movies";
-	searchRequest.query = {"match_all": {}};
-    
-	var expr = {'expr': 'min(year,2900)'};
-	searchRequest.expressions = [expr];
-	searchRequest.expressions.push({'expr2': 'max(year,2100)'});
-	searchRequest.source.includes.push('expr2');
-	
-	async function(){
-		var res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}
-	//For detailed information on expressions see https://manual.manticoresearch.com/Searching/Expressions#Expressions-in-HTTP-JSON
+//Setting the `expressions` property:
+var searchRequest = new Manticoresearch.SearchRequest();
+searchRequest.index = "movies";
+searchRequest.query = {"match_all": {}};
+
+var expr = {'expr': 'min(year,2900)'};
+searchRequest.expressions = [expr];
+searchRequest.expressions.push({'expr2': 'max(year,2100)'});
+searchRequest.source.includes.push('expr2');
+
+async function(){
+	var res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}
+//For detailed information on expressions see https://manual.manticoresearch.com/Searching/Expressions#Expressions-in-HTTP-JSON
 ```
 
 ### Aggregation
 
 [[Aggregation]](Aggregation.md)
 ```javascript    
-    //Setting the `aggs` property with an auxiliary object:
-    var searchRequest = new Manticoresearch.SearchRequest();
-    searchRequest.index = "movies";
-	searchRequest.query = {"match_all": {}};
-    
-	var agg1 = new Manticoresearch.Aggregation('agg1', 'year');
-	Manticoresearch.Aggregation.constructFromObject({size:10}, agg1);
-	searchRequest.aggs = [agg1];
-	searchRequest.aggs.push(new Manticoresearch.Aggregation('agg2', 'rating'));
-	
-	async function(){
-		var res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}
-	//For detailed information on aggregations see https://manual.manticoresearch.com/Searching/Faceted_search#Aggregations
+//Setting the `aggs` property with an auxiliary object:
+var searchRequest = new Manticoresearch.SearchRequest();
+searchRequest.index = "movies";
+searchRequest.query = {"match_all": {}};
+
+var agg1 = new Manticoresearch.Aggregation('agg1', 'year');
+Manticoresearch.Aggregation.constructFromObject({size:10}, agg1);
+searchRequest.aggs = [agg1];
+searchRequest.aggs.push(new Manticoresearch.Aggregation('agg2', 'rating'));
+
+async function(){
+	var res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}
+//For detailed information on aggregations see https://manual.manticoresearch.com/Searching/Faceted_search#Aggregations
 ```
 
 ### Highlight
 
 [[Highlight]](Highlight.md)
 ```javascript
-    //Settting the `highlight` property with auxillary object:
-    var searchRequest = new Manticoresearch.SearchRequest();
-    searchRequest.index = "movies";
-	searchRequest.query = {"match_all": {}};
-    
-	var highlight = new Manticoresearch.Highlight();
-	highlight.fieldnames = ['title'];
-	highlight.post_tags = '</post_tag>';
-    highlight.encoder = 'default';
-    highlight.snippet_boundary = 'sentence';
-	searchRequest.highlight = highlight;
+//Settting the `highlight` property with auxillary object:
+var searchRequest = new Manticoresearch.SearchRequest();
+searchRequest.index = "movies";
+searchRequest.query = {"match_all": {}};
 
-	async function(){
-		var res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}
-	#For detailed information on highlighting see https://manual.manticoresearch.com/Searching/Highlighting#Highlighting
+var highlight = new Manticoresearch.Highlight();
+highlight.fieldnames = ['title'];
+highlight.post_tags = '</post_tag>';
+highlight.encoder = 'default';
+highlight.snippet_boundary = 'sentence';
+searchRequest.highlight = highlight;
+
+async function(){
+	var res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}
+#For detailed information on highlighting see https://manual.manticoresearch.com/Searching/Highlighting#Highlighting
 ```
 
 #### HighlightField
 
 [[HighlightField]](HighlightField.md)
 ```javascript
-	// settting `highlight.fields` property with auxillary HighlightField object
-	var searchRequest = new Manticoresearch.SearchRequest();
-	searchRequest.index = "movies";
-	searchRequest.query = {"match_all": {}};
+// settting `highlight.fields` property with auxillary HighlightField object
+var searchRequest = new Manticoresearch.SearchRequest();
+searchRequest.index = "movies";
+searchRequest.query = {"match_all": {}};
 
-	var highlight = new Manticoresearch.Highlight();
-	var highlightField = new Manticoresearch.HighlightField('title');
-	var highlightField2 = new Manticoresearch.HighlightField('plot');
-	Manticoresearch.HighlightField.constructFromObject({limit:5}, highlightField2);
-	Manticoresearch.HighlightField.constructFromObject({limit_words:10}, highlightField2);
-	highlight.fields = [highlightField, highlightField2];
-	searchRequest.highlight = highlight;
+var highlight = new Manticoresearch.Highlight();
+var highlightField = new Manticoresearch.HighlightField('title');
+var highlightField2 = new Manticoresearch.HighlightField('plot');
+Manticoresearch.HighlightField.constructFromObject({limit:5}, highlightField2);
+Manticoresearch.HighlightField.constructFromObject({limit_words:10}, highlightField2);
+highlight.fields = [highlightField, highlightField2];
+searchRequest.highlight = highlight;
 
-	async function(){
-		var res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}
-	#For detailed information on highlighting see https://manual.manticoresearch.com/Searching/Highlighting#Highlighting
+async function(){
+	var res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}
+#For detailed information on highlighting see https://manual.manticoresearch.com/Searching/Highlighting#Highlighting
 ```
 
 ### FulltextFilter
@@ -274,73 +274,73 @@ For more information about the match query syntax and additional parameters that
 
 [[QueryFilter]](QueryFilter.md)
 ```javascript    
-	//Setting the `fulltext_filter` property using different fulltext filter objects:
-	
-    //Using a QueryFilter object
-	var searchRequest = manticoresearch.model.SearchRequest();
-    searchRequest.index = "movies";
+//Setting the `fulltext_filter` property using different fulltext filter objects:
 
-    searchRequest.fulltext_filter = new Manticoresearch.QueryFilter('Star Trek 2');
-    
-    async function(){
-		var res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}
-	
-	#For detailed information on fulltext filters see https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP
+//Using a QueryFilter object
+var searchRequest = manticoresearch.model.SearchRequest();
+searchRequest.index = "movies";
+
+searchRequest.fulltext_filter = new Manticoresearch.QueryFilter('Star Trek 2');
+
+async function(){
+	var res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}
+
+#For detailed information on fulltext filters see https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP
 ```
 
 #### MatchFilter
 
 [[MatchFilter]](MatchFilter.md)
 ```javascript    
-    //Using a MatchFilter object
-	var searchRequest = manticoresearch.model.SearchRequest();
-    searchRequest.index = "movies";
+//Using a MatchFilter object
+var searchRequest = manticoresearch.model.SearchRequest();
+searchRequest.index = "movies";
 
-    searchRequest.fulltext_filter = new Manticoresearch.MatchFilter('Nemesis', 'title');
-    
-    async function(){
-		var res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}
-	
-	#For detailed information on fulltext filters see https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP
+searchRequest.fulltext_filter = new Manticoresearch.MatchFilter('Nemesis', 'title');
+
+async function(){
+	var res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}
+
+#For detailed information on fulltext filters see https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP
 ```
 
 #### MatchPhraseFilter
 
 [[MatchPhraseFilter]](MatchPhraseFilter.md)
 ```javascript    
-    //Using a MatchPhraseFilter object
-    var searchRequest = manticoresearch.model.SearchRequest();
-    searchRequest.index = "movies";
-    
-    searchRequest.fulltext_filter = new Manticoresearch.MatchPhraseFilter('Star Trek 2', 'title');
+//Using a MatchPhraseFilter object
+var searchRequest = manticoresearch.model.SearchRequest();
+searchRequest.index = "movies";
 
-    async function(){
-		var res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}
-	
-	#For detailed information on fulltext filters see https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP
+searchRequest.fulltext_filter = new Manticoresearch.MatchPhraseFilter('Star Trek 2', 'title');
+
+async function(){
+	var res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}
+
+#For detailed information on fulltext filters see https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP
 ```
 
 #### MatchOpFilter
 
 [[MatchOpFilter]](MatchOpFilter.md)
 ```javascript
-	//Using a MatchOpFilter object
-	var searchRequest = manticoresearch.model.SearchRequest();
-    searchRequest.index = "movies";
-    
-	searchRequest.fulltext_filter = new Manticoresearch.MatchOpFilter('Enterprise test', 'title,plot', 'or');
-	async function(){
-		var res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}
-	
-	#For detailed information on fulltext filters see https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP
+//Using a MatchOpFilter object
+var searchRequest = manticoresearch.model.SearchRequest();
+searchRequest.index = "movies";
+
+searchRequest.fulltext_filter = new Manticoresearch.MatchOpFilter('Enterprise test', 'title,plot', 'or');
+async function(){
+	var res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}
+
+#For detailed information on fulltext filters see https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP
 ```    
 
 ### AttrFilter
@@ -348,140 +348,140 @@ For more information about the match query syntax and additional parameters that
 
 [[EqualsFilter]](EqualsFilter.md)
 ```javascript
-    //Setting the `attr_filter` property using different attribute filter objects:
-    
-    //Using EqualsFilter object
-    var searchRequest = manticoresearch.model.SearchRequest();
-    searchRequest.index = "movies";
-    
-    searchRequest.attr_filter = new Manticoresearch.EqualsFilter('year', 2003);
-	
-	async function(){
-		var res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}
-	
-	//For detailed information on equality filters see https://manual.manticoresearch.com/Searching/Filters#Equality-filters
+//Setting the `attr_filter` property using different attribute filter objects:
+
+//Using EqualsFilter object
+var searchRequest = manticoresearch.model.SearchRequest();
+searchRequest.index = "movies";
+
+searchRequest.attr_filter = new Manticoresearch.EqualsFilter('year', 2003);
+
+async function(){
+	var res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}
+
+//For detailed information on equality filters see https://manual.manticoresearch.com/Searching/Filters#Equality-filters
 ```
 
 #### InFilter
 
 [[InFilter]](InFilter.md)
 ```javascript
-    //Using InFilter object
-    var searchRequest = manticoresearch.model.SearchRequest();
-    searchRequest.index = "movies";
-    
-    var inFilter = new Manticoresearch.InFilter('year', [2001, 2002]);
-	inFilter.values = inFilter.values.concat([10,11]);
-	searchRequest.attr_filter = inFilter;
-	
-	async function(){
-		var res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}
-	
-	//For detailed information on set filters see https://manual.manticoresearch.com/Searching/Filters#Set-filters
+//Using InFilter object
+var searchRequest = manticoresearch.model.SearchRequest();
+searchRequest.index = "movies";
+
+var inFilter = new Manticoresearch.InFilter('year', [2001, 2002]);
+inFilter.values = inFilter.values.concat([10,11]);
+searchRequest.attr_filter = inFilter;
+
+async function(){
+	var res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}
+
+//For detailed information on set filters see https://manual.manticoresearch.com/Searching/Filters#Set-filters
 ```
 			
 #### RangeFilter
 
 [[RangeFilter]](RangeFilter.md)
 ```javascript
-	//Using RangeFilter object
-	var searchRequest = manticoresearch.model.SearchRequest();
-    searchRequest.index = "movies";
-	
-	var rangeFilter = new Manticoresearch.RangeFilter('year');
-	Manticoresearch.RangeFilter.constructFromObject({lte: 2002}, rangeFilter);
-	Manticoresearch.RangeFilter.constructFromObject({gte: 1000}, rangeFilter);
-	searchRequest.attr_filter = rangeFilter;
+//Using RangeFilter object
+var searchRequest = manticoresearch.model.SearchRequest();
+searchRequest.index = "movies";
 
-	async function(){
-		var res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}	
-	
-	//For detailed information on range filters see https://manual.manticoresearch.com/Searching/Filters#Range-filters
+var rangeFilter = new Manticoresearch.RangeFilter('year');
+Manticoresearch.RangeFilter.constructFromObject({lte: 2002}, rangeFilter);
+Manticoresearch.RangeFilter.constructFromObject({gte: 1000}, rangeFilter);
+searchRequest.attr_filter = rangeFilter;
+
+async function(){
+	var res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}	
+
+//For detailed information on range filters see https://manual.manticoresearch.com/Searching/Filters#Range-filters
 ```
 
 #### GeoDistanceFilter
 
 [[GeoDistanceFilter]](GeoDistanceFilter.md)
 ```javascript
-    //Using GeoDistanceFilter object
-	var searchRequest = manticoresearch.model.SearchRequest();
-    searchRequest.index = "movies";
-    
-	var geoFilter = new Manticoresearch.GeoDistanceFilter();
-	var locAnchor = {'location_anchor': {'lat':10,'lon':20}};
-	Manticoresearch.GeoDistanceFilter.constructFromObject(locAnchor, geoFilter);
-	Manticoresearch.GeoDistanceFilter.constructFromObject({'location_source':'field3,field4'}, geoFilter);
-	Manticoresearch.GeoDistanceFilter.constructFromObject({'distance_type': 'adaptive', 'distance': '100km'}, geoFilter);
-	searchRequest.attr_filter = geoFilter;
+//Using GeoDistanceFilter object
+var searchRequest = manticoresearch.model.SearchRequest();
+searchRequest.index = "movies";
 
-	async function(){
-		var res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}
-	
-	//For detailed information on geo distance filters see https://manual.manticoresearch.com/Searching/Filters#Geo-distance-filters	
+var geoFilter = new Manticoresearch.GeoDistanceFilter();
+var locAnchor = {'location_anchor': {'lat':10,'lon':20}};
+Manticoresearch.GeoDistanceFilter.constructFromObject(locAnchor, geoFilter);
+Manticoresearch.GeoDistanceFilter.constructFromObject({'location_source':'field3,field4'}, geoFilter);
+Manticoresearch.GeoDistanceFilter.constructFromObject({'distance_type': 'adaptive', 'distance': '100km'}, geoFilter);
+searchRequest.attr_filter = geoFilter;
+
+async function(){
+	var res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}
+
+//For detailed information on geo distance filters see https://manual.manticoresearch.com/Searching/Filters#Geo-distance-filters	
 ```
 
 #### BoolFilter
 
 [[BoolFilter]](BoolFilter.md)
 ```javascript
-	//Setting the `attr_filter` property using a bool filter object:
-	var searchRequest = manticoresearch.model.SearchRequest();
-    searchRequest.index = "movies";
-    
-	var boolFilter = new Manticoresearch.BoolFilter();
-	boolFilter.must = [ new Manticoresearch.EqualsFilter('year', 2001) ];
-	rangeFilter = new Manticoresearch.RangeFilter('rating');
-	Manticoresearch.RangeFilter.constructFromObject({lte: 20}, rangeFilter);
-	boolFilter.must.push(rangeFilter);
-	searchRequest.attr_filter = boolFilter;
-	
-	async function(){
-		var res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}
+//Setting the `attr_filter` property using a bool filter object:
+var searchRequest = manticoresearch.model.SearchRequest();
+searchRequest.index = "movies";
 
-	boolFilter.must_not = [ new Manticoresearch.EqualsFilter('year', 2001) ];
-	searchRequest.attr_filter = boolFilter;
-	
-	async function(){
-		res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}
-	
-	//Using nested bool filters
-    searchRequest = manticoresearch.model.SearchRequest();
-    searchRequest.index = "movies";
-    	
-	var fulltextFilter = new Manticoresearch.MatchFilter('Star', 'title');
-	var nestedBoolFilter = new Manticoresearch.BoolFilter();
-	nestedBoolFilter.should = [ new Manticoresearch.EqualsFilter('rating', 6.5), fulltextFilter];
-	boolFilter.must = [nestedBoolFilter];
-    searchRequest.attr_filter = boolFilter;
+var boolFilter = new Manticoresearch.BoolFilter();
+boolFilter.must = [ new Manticoresearch.EqualsFilter('year', 2001) ];
+rangeFilter = new Manticoresearch.RangeFilter('rating');
+Manticoresearch.RangeFilter.constructFromObject({lte: 20}, rangeFilter);
+boolFilter.must.push(rangeFilter);
+searchRequest.attr_filter = boolFilter;
 
-	async function(){
-		res = await searchApi.search(searchRequest);
-		console.log(JSON.stringify(res, null, 4));  
-	}
+async function(){
+	var res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}
+
+boolFilter.must_not = [ new Manticoresearch.EqualsFilter('year', 2001) ];
+searchRequest.attr_filter = boolFilter;
+
+async function(){
+	res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}
+
+//Using nested bool filters
+searchRequest = manticoresearch.model.SearchRequest();
+searchRequest.index = "movies";
 	
-	#For detailed information on Bool queries see https://manual.manticoresearch.com/Searching/Filters#bool-query
+var fulltextFilter = new Manticoresearch.MatchFilter('Star', 'title');
+var nestedBoolFilter = new Manticoresearch.BoolFilter();
+nestedBoolFilter.should = [ new Manticoresearch.EqualsFilter('rating', 6.5), fulltextFilter];
+boolFilter.must = [nestedBoolFilter];
+searchRequest.attr_filter = boolFilter;
+
+async function(){
+	res = await searchApi.search(searchRequest);
+	console.log(JSON.stringify(res, null, 4));  
+}
+
+//For detailed information on Bool queries see https://manual.manticoresearch.com/Searching/Filters#bool-query
 ```
 			
 ### Example of how to build search requests using the alternative way with a single literal object 
 ```javascript
 
-	var searchRequest = {"index":"myindex","query":{"query_string":"@title \"find me fast \"/2"}};
-	async function(){
-	    var res = await searchApi.search(searchRequest);
-	    console.log(JSON.stringify(res, null, 4));
-	}
+var searchRequest = {"index":"myindex","query":{"query_string":"@title \"find me fast \"/2"}};
+async function(){
+    var res = await searchApi.search(searchRequest);
+    console.log(JSON.stringify(res, null, 4));
+}
 ```
 
 ### Parameters
