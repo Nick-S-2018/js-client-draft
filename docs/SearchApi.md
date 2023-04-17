@@ -77,6 +77,7 @@ Performs a search
 Expects an object with mandatory properties:
 * the index name
 * the match query object
+
 Example :
 
   ```
@@ -104,12 +105,14 @@ For more information about the match query syntax and additional parameters that
 var Manticoresearch = require('manticoresearch');
 var client = new Manticoresearch.ApiClient();
 client.basePath="http://localhost:9308";
+var searchApi = new Manticoresearch.SearchApi(client);
 ```
 
 ### SearchRequest
+
+[[Detailed information on search options]](https://manual.manticoresearch.com/Searching/Options#Search-options)
 ```javascript
-var searchApi = new Manticoresearch.SearchApi(client);
-	
+
 var searchRequest = new Manticoresearch.SearchRequest();
 searchRequest.index = "movies";
 searchRequest.query = {"match_all": {}};
@@ -129,6 +132,8 @@ async function(){
 ### SourceByRules
 
 [[SourceByRules]](SourceByRules.md)
+
+[[Detailed information on the `source` property]](https://manual.manticoresearch.com/Searching/Search_results#Source-selection)
 ```javascript
 var searchRequest = new Manticoresearch.SearchRequest();
 searchRequest.index = "movies";
@@ -142,8 +147,6 @@ async function(){
 	var res = await searchApi.search(searchRequest);
 	console.log(JSON.stringify(res, null, 4));  
 }
-
-For detailed information on the `source` property see https://manual.manticoresearch.com/Searching/Search_results#Source-selection
 ```
 
 ### Sort
@@ -166,6 +169,8 @@ async function(){
 
 [[SortOrder]](SortOrder.md)
 [[SortMVA]](SortMVA.md)
+
+[[Detailed information on sorting]](https://manual.manticoresearch.com/Searching/Sorting_and_ranking#HTTP)
 ```javascript
 var searchRequest = new Manticoresearch.SearchRequest();
 searchRequest.index = "movies";
@@ -179,10 +184,11 @@ async function(){
 	var res = await searchApi.search(searchRequest);
 	console.log(JSON.stringify(res, null, 4));  
 }
-//For detailed information on sorting see https://manual.manticoresearch.com/Searching/Sorting_and_ranking#HTTP
 ```
 
 ### Expressions
+
+[[Detailed information on expressions]](https://manual.manticoresearch.com/Searching/Expressions#Expressions-in-HTTP-JSON)
 ```javascript    
 //Setting the `expressions` property:
 var searchRequest = new Manticoresearch.SearchRequest();
@@ -198,12 +204,13 @@ async function(){
 	var res = await searchApi.search(searchRequest);
 	console.log(JSON.stringify(res, null, 4));  
 }
-//For detailed information on expressions see https://manual.manticoresearch.com/Searching/Expressions#Expressions-in-HTTP-JSON
 ```
 
 ### Aggregation
 
 [[Aggregation]](Aggregation.md)
+
+[[Detailed information on aggregations](https://manual.manticoresearch.com/Searching/Faceted_search#Aggregations)
 ```javascript    
 //Setting the `aggs` property with an auxiliary object:
 var searchRequest = new Manticoresearch.SearchRequest();
@@ -219,14 +226,15 @@ async function(){
 	var res = await searchApi.search(searchRequest);
 	console.log(JSON.stringify(res, null, 4));  
 }
-//For detailed information on aggregations see https://manual.manticoresearch.com/Searching/Faceted_search#Aggregations
 ```
 
 ### Highlight
 
 [[Highlight]](Highlight.md)
+
+[[Detailed information on highlighting]](https://manual.manticoresearch.com/Searching/Highlighting#Highlighting)
 ```javascript
-//Settting the `highlight` property with auxillary object:
+//Settting the `highlight` property with an auxiliary object:
 var searchRequest = new Manticoresearch.SearchRequest();
 searchRequest.index = "movies";
 searchRequest.query = {"match_all": {}};
@@ -242,14 +250,15 @@ async function(){
 	var res = await searchApi.search(searchRequest);
 	console.log(JSON.stringify(res, null, 4));  
 }
-#For detailed information on highlighting see https://manual.manticoresearch.com/Searching/Highlighting#Highlighting
 ```
 
 #### HighlightField
 
 [[HighlightField]](HighlightField.md)
+
+[[Detailed information on highlighting]](https://manual.manticoresearch.com/Searching/Highlighting#Highlighting)
 ```javascript
-// settting `highlight.fields` property with auxillary HighlightField object
+// settting `highlight.fields` property with an auxiliary HighlightField object
 var searchRequest = new Manticoresearch.SearchRequest();
 searchRequest.index = "movies";
 searchRequest.query = {"match_all": {}};
@@ -266,11 +275,12 @@ async function(){
 	var res = await searchApi.search(searchRequest);
 	console.log(JSON.stringify(res, null, 4));  
 }
-#For detailed information on highlighting see https://manual.manticoresearch.com/Searching/Highlighting#Highlighting
 ```
 
 ### FulltextFilter
 #### QueryFilter
+
+[[Detailed information on fulltext filters]](https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP)
 
 [[QueryFilter]](QueryFilter.md)
 ```javascript    
@@ -286,8 +296,6 @@ async function(){
 	var res = await searchApi.search(searchRequest);
 	console.log(JSON.stringify(res, null, 4));  
 }
-
-#For detailed information on fulltext filters see https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP
 ```
 
 #### MatchFilter
@@ -304,8 +312,6 @@ async function(){
 	var res = await searchApi.search(searchRequest);
 	console.log(JSON.stringify(res, null, 4));  
 }
-
-#For detailed information on fulltext filters see https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP
 ```
 
 #### MatchPhraseFilter
@@ -322,8 +328,6 @@ async function(){
 	var res = await searchApi.search(searchRequest);
 	console.log(JSON.stringify(res, null, 4));  
 }
-
-#For detailed information on fulltext filters see https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP
 ```
 
 #### MatchOpFilter
@@ -335,18 +339,19 @@ var searchRequest = manticoresearch.model.SearchRequest();
 searchRequest.index = "movies";
 
 searchRequest.fulltext_filter = new Manticoresearch.MatchOpFilter('Enterprise test', 'title,plot', 'or');
+
 async function(){
 	var res = await searchApi.search(searchRequest);
 	console.log(JSON.stringify(res, null, 4));  
 }
-
-#For detailed information on fulltext filters see https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP
 ```    
 
 ### AttrFilter
 #### EqualsFilter
 
 [[EqualsFilter]](EqualsFilter.md)
+
+[[Detailed information on equality filters]](https://manual.manticoresearch.com/Searching/Filters#Equality-filters)
 ```javascript
 //Setting the `attr_filter` property using different attribute filter objects:
 
@@ -360,13 +365,13 @@ async function(){
 	var res = await searchApi.search(searchRequest);
 	console.log(JSON.stringify(res, null, 4));  
 }
-
-//For detailed information on equality filters see https://manual.manticoresearch.com/Searching/Filters#Equality-filters
 ```
 
 #### InFilter
 
 [[InFilter]](InFilter.md)
+
+[[Detailed information on set filters]](https://manual.manticoresearch.com/Searching/Filters#Set-filters)
 ```javascript
 //Using InFilter object
 var searchRequest = manticoresearch.model.SearchRequest();
@@ -380,13 +385,13 @@ async function(){
 	var res = await searchApi.search(searchRequest);
 	console.log(JSON.stringify(res, null, 4));  
 }
-
-//For detailed information on set filters see https://manual.manticoresearch.com/Searching/Filters#Set-filters
 ```
 			
 #### RangeFilter
 
 [[RangeFilter]](RangeFilter.md)
+
+[[Detailed information on range filters]](https://manual.manticoresearch.com/Searching/Filters#Range-filters)
 ```javascript
 //Using RangeFilter object
 var searchRequest = manticoresearch.model.SearchRequest();
@@ -401,17 +406,17 @@ async function(){
 	var res = await searchApi.search(searchRequest);
 	console.log(JSON.stringify(res, null, 4));  
 }	
-
-//For detailed information on range filters see https://manual.manticoresearch.com/Searching/Filters#Range-filters
 ```
 
 #### GeoDistanceFilter
 
 [[GeoDistanceFilter]](GeoDistanceFilter.md)
+
+[[Detailed information on geo distance filters]](https://manual.manticoresearch.com/Searching/Filters#Geo-distance-filters)
 ```javascript
 //Using GeoDistanceFilter object
 var searchRequest = manticoresearch.model.SearchRequest();
-searchRequest.index = "movies";
+searchRequest.index = "geo";
 
 var geoFilter = new Manticoresearch.GeoDistanceFilter();
 var locAnchor = {'location_anchor': {'lat':10,'lon':20}};
@@ -424,13 +429,13 @@ async function(){
 	var res = await searchApi.search(searchRequest);
 	console.log(JSON.stringify(res, null, 4));  
 }
-
-//For detailed information on geo distance filters see https://manual.manticoresearch.com/Searching/Filters#Geo-distance-filters	
 ```
 
 #### BoolFilter
 
 [[BoolFilter]](BoolFilter.md)
+
+[[Detailed information on Bool queries]](https://manual.manticoresearch.com/Searching/Filters#bool-query)
 ```javascript
 //Setting the `attr_filter` property using a bool filter object:
 var searchRequest = manticoresearch.model.SearchRequest();
@@ -470,8 +475,6 @@ async function(){
 	res = await searchApi.search(searchRequest);
 	console.log(JSON.stringify(res, null, 4));  
 }
-
-//For detailed information on Bool queries see https://manual.manticoresearch.com/Searching/Filters#bool-query
 ```
 			
 ### Example of how to build search requests using the alternative way with a single literal object 
