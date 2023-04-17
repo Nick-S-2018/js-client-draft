@@ -27,7 +27,7 @@
   /**
    * The MatchPhraseFilter model module.
    * @module model/MatchPhraseFilter
-   * @version 3.2.1
+   * @version 3.3.0
    */
 
   /**
